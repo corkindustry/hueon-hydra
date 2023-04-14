@@ -1,0 +1,42 @@
+a.setCutoff(2)
+a.setSmooth(0.9)
+
+s0.initCam(1)
+
+sh = () =>
+	shape(7, 0.3, 0.3)
+	.mask(osc(150, 0.01, 0.1))
+ 	.modulateRotate(s0)
+
+
+sh()
+	.color(1, 0, 0)
+	.blend(o2, () => a.fft[0])
+	.modulate(osc(10, 0.01, 0.1))
+	.modulateRotate(noise(2, 0), 0.3)
+	.rotate(Math.PI * 2, 0.01, 0.3)
+	.out(o0)
+
+sh()
+	.color(0, 1, 0)
+	.blend(o0, () => a.fft[1])
+	.modulate(osc(10, 0.01, 0.1))
+	.modulateRotate(noise(2, 0), 0.2)
+	.rotate(Math.PI * 2, 0.01, 0.2)
+	.out(o1)
+
+sh()
+	.color(0, 0, 1)
+	.blend(o1, () => a.fft[2])
+	.modulateRotate(noise(2, 0), 0.4)
+	.modulate(osc(10, 0.01, 0.1))
+	.rotate(Math.PI * 2, 0.01, 0.1)
+	.out(o2)
+
+solid()
+	.add(src(o0), 5)
+	.add(src(o1), 5)
+	.add(src(o2), 5)
+	.out(o3)
+
+render(o3)
